@@ -1,0 +1,31 @@
+track_a_genimage:
+  root_dir: datasets/genimage
+  generators:
+    - BigGAN
+    - GLIDE
+    - Midjourney
+    - SDv1.4
+    - SDv1.5
+    - ADM
+    - Wukong
+    - VQDM
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+track_b_faceforensics:
+  root_dir: datasets/faceforensics
+  manipulations:
+    - Deepfakes
+    - Face2Face
+    - FaceSwap
+    - NeuralTextures
+  compression: c23  # c23 (HQ) or c40 (LQ)
+  frames_per_video: 16
+  train_ratio: 0.7
+  val_ratio: 0.15
+  test_ratio: 0.15
+
+track_b_celebdf:
+  root_dir: datasets/celebdf
+  frames_per_video: 16
