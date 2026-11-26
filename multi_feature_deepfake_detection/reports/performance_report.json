@@ -1,0 +1,7 @@
+{
+  "device": "cpu",
+  "model_load_ms": 113.24,
+  "trainable_parameters": 7239161,
+  "latency_ms_per_image_b1": 445.96,
+  "latency_ms_per_image_b4": 421.68
+}

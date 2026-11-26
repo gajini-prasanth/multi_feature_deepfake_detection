@@ -92,7 +92,15 @@ class Trainer:
         self.best_val_loss = ckpt.get("best_val_loss", float("inf"))
         return int(ckpt["epoch"]) + 1
 
-    def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[Dict[str, float]]:
+    def fit(
+        self,
+        train_loader: DataLoader,
+        val_loader: DataLoader,
+        epochs: int,
+        start_epoch: int = 1,
+        patience: int = 7,
+    ) -> List[Dict[str, float]]:
+        no_improve = 0
         for epoch in range(start_epoch, epochs + 1):
             train_metrics = self._run_epoch(train_loader, train=True)
             val_metrics = self._run_epoch(val_loader, train=False)
@@ -113,6 +121,11 @@ class Trainer:
             if val_metrics["loss"] < self.best_val_loss:
                 self.best_val_loss = val_metrics["loss"]
                 self.save_checkpoint(epoch, "best_model.pt")
+                no_improve = 0
+            else:
+                no_improve += 1
+                if patience > 0 and no_improve >= patience:
+                    break
 
         with open(self.checkpoint_dir / "history.json", "w", encoding="utf-8") as f:
             json.dump(self.history, f, indent=2)

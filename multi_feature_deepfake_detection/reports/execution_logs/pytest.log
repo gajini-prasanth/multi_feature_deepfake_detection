@@ -1,0 +1,77 @@
+============================= test session starts =============================
+platform win32 -- Python 3.14.10, pytest-9.2.0, pluggy-1.7.0 -- E:\GitHub\multi_feature_deepfake_detection\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+hypothesis profile 'default'
+rootdir: E:\GitHub\multi_feature_deepfake_detection
+plugins: anyio-4.16.0, hypothesis-6.170.17, cov-7.1.0
+collecting ... collected 25 items
+
+tests/data/test_dataset_edge_cases.py::test_missing_and_corrupted_image_handling PASSED [  4%]
+tests/data/test_dataset_edge_cases.py::test_class_balance_and_dataloader PASSED [  8%]
+tests/data/test_dataset_edge_cases.py::test_video_split_prevents_leakage PASSED [ 12%]
+tests/integration/test_end_to_end.py::test_end_to_end_track_a_and_track_b PASSED [ 16%]
+tests/model/test_full_model_lifecycle.py::test_full_model_forward_backward_and_checkpoint PASSED [ 20%]
+tests/performance/test_benchmarks.py::test_performance_benchmarks PASSED [ 24%]
+tests/security/test_security_checks.py::test_no_hardcoded_secrets_in_source PASSED [ 28%]
+tests/test_data_pipeline.py::test_dataset_and_transforms PASSED          [ 32%]
+tests/test_data_pipeline.py::test_video_split_no_leakage PASSED          [ 36%]
+tests/test_evaluation.py::test_compute_all_metrics_and_aggregation PASSED [ 40%]
+tests/test_fusion.py::test_single_and_two_stream_configs PASSED          [ 44%]
+tests/test_fusion.py::test_three_stream_fusion_strategies_and_gradients PASSED [ 48%]
+tests/test_gradcam.py::test_multistream_gradcam PASSED                   [ 52%]
+tests/test_streams.py::test_residual_stream PASSED                       [ 56%]
+tests/test_streams.py::test_frequency_stream_fft_and_dct PASSED          [ 60%]
+tests/test_streams.py::test_content_stream PASSED                        [ 64%]
+tests/test_training.py::test_trainer_smoke_and_resume PASSED             [ 68%]
+tests/ui/test_streamlit_and_edge_cases.py::test_streamlit_app_compiles PASSED [ 72%]
+tests/ui/test_streamlit_and_edge_cases.py::test_edge_case_images PASSED  [ 76%]
+tests/unit/test_streams_and_fusion.py::test_srm_kernels_and_residual_channels PASSED [ 80%]
+tests/unit/test_streams_and_fusion.py::test_frequency_stream_fft_and_dct_stability PASSED [ 84%]
+tests/unit/test_streams_and_fusion.py::test_content_stream_bayar_and_sobel PASSED [ 88%]
+tests/unit/test_streams_and_fusion.py::test_cross_attention_various_batch_sizes PASSED [ 92%]
+tests/unit/test_streams_and_fusion.py::test_classification_probability_range PASSED [ 96%]
+tests/unit/test_streams_and_fusion.py::test_gradcam_unit PASSED          [100%]
+
+============================== warnings summary ===============================
+tests/data/test_dataset_edge_cases.py::test_class_balance_and_dataloader
+tests/test_data_pipeline.py::test_dataset_and_transforms
+  E:\GitHub\multi_feature_deepfake_detection\.venv\Lib\site-packages\torch\utils\data\dataloader.py:759: UserWarning: 'pin_memory' argument is set as true but no accelerator is found, then device pinned memory won't be used.
+    super().__init__(loader)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.14.10-final-0 _______________
+
+Name                            Stmts   Miss  Cover
+---------------------------------------------------
+data\__init__.py                    5      0   100%
+data\augmentation.py               25     10    60%
+data\dataset_loader.py             37     12    68%
+data\preprocessing.py              21      1    95%
+data\video_processor.py            52     38    27%
+evaluation\__init__.py              2      0   100%
+evaluation\ablation.py             11     11     0%
+evaluation\cross_generator.py      32     32     0%
+evaluation\evaluate.py             46     46     0%
+evaluation\metrics.py              42      2    95%
+evaluation\robustness.py           31     31     0%
+explainability\__init__.py          2      0   100%
+explainability\gradcam.py          53      0   100%
+models\__init__.py                  4      0   100%
+models\ai_image_detector.py         4      0   100%
+models\content_stream.py           47      0   100%
+models\cross_attention.py          34      0   100%
+models\deepfake_detector.py         4      0   100%
+models\frequency_stream.py         43      1    98%
+models\fusion_model.py             63      2    97%
+models\residual_stream.py          59      0   100%
+training\__init__.py                3      0   100%
+training\losses.py                 39      3    92%
+training\train.py                  42     42     0%
+training\train_deepfake.py         41     41     0%
+training\trainer.py                71      2    97%
+---------------------------------------------------
+TOTAL                             813    274    66%
+Coverage HTML written to dir reports/coverage
+Coverage JSON written to file reports/test_summary.json
+================== 25 passed, 2 warnings in 66.48s (0:01:06) ==================

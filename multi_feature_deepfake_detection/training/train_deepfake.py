@@ -69,12 +69,20 @@ def main() -> None:
         criterion=criterion,
         optimizer=optimizer,
         scheduler=scheduler,
-        checkpoint_dir=f"{cfg['training']['checkpoint_dir']}/track_b_{args.fusion}",
+        checkpoint_dir=cfg["training"]["checkpoint_dir"],
         use_amp=cfg["training"]["use_amp"],
         use_contrastive=False,
     )
     start_epoch = trainer.load_checkpoint(args.resume) if args.resume else 1
-    trainer.fit(train_loader, val_loader, epochs=epochs, start_epoch=start_epoch)
+    history = trainer.fit(train_loader, val_loader, epochs=epochs, start_epoch=start_epoch)
+    best_src = Path(cfg["training"]["checkpoint_dir"]) / "best_model.pt"
+    if best_src.exists():
+        ckpt = torch.load(best_src, map_location="cpu")
+        ckpt["config"] = cfg
+        ckpt["class_labels"] = {0: "Real Face", 1: "Manipulated / Deepfake"}
+        ckpt["image_size"] = img_size
+        ckpt["val_metrics"] = history[-1] if history else {}
+        torch.save(ckpt, Path(cfg["training"]["checkpoint_dir"]) / "best_deepfake_detector.pt")
 
 
 if __name__ == "__main__":

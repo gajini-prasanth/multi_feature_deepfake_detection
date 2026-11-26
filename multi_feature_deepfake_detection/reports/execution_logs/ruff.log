@@ -1,0 +1,1698 @@
+I001 [*] Import block is un-sorted or un-formatted
+  --> app\streamlit_app.py:12:1
+   |
+10 |   sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+11 |
+12 | / from data.augmentation import get_val_transforms
+13 | | from explainability.gradcam import MultiStreamGradCAM, overlay_heatmap
+14 | | from models.ai_image_detector import AIImageDetector
+15 | | from models.deepfake_detector import DeepfakeDetector
+   | |_____________________________________________________^
+help: Organize imports
+   |
+16 |
+   -
+17 | st.set_page_config(page_title="Multi-Feature Deepfake & AI Image Detector", layout="wide")
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> data\__init__.py:1:1
+  |
+1 | / from .preprocessing import load_rgb_image, verify_dataset_balance
+2 | | from .augmentation import get_train_transforms, get_val_transforms, get_degradation_transform
+3 | | from .video_processor import extract_frames_and_faces, split_videos_without_leakage
+4 | | from .dataset_loader import ImageForensicsDataset, create_dataloaders
+  | |_____________________________________________________________________^
+5 |
+6 |   __all__ = [
+  |
+help: Organize imports
+  |
+1 + from .augmentation import (
+2 +     get_degradation_transform,
+3 +     get_train_transforms,
+4 +     get_val_transforms,
+5 + )
+6 + from .dataset_loader import ImageForensicsDataset, create_dataloaders
+7 | from .preprocessing import load_rgb_image, verify_dataset_balance
+  - from .augmentation import get_train_transforms, get_val_transforms, get_degradation_transform
+8 | from .video_processor import extract_frames_and_faces, split_videos_without_leakage
+  - from .dataset_loader import ImageForensicsDataset, create_dataloaders
+9 |
+  |
+
+RUF022 [*] `__all__` is not sorted
+  --> data\__init__.py:6:11
+   |
+ 4 |   from .dataset_loader import ImageForensicsDataset, create_dataloaders
+ 5 |
+ 6 |   __all__ = [
+   |  ___________^
+ 7 | |     "load_rgb_image",
+ 8 | |     "verify_dataset_balance",
+ 9 | |     "get_train_transforms",
+10 | |     "get_val_transforms",
+11 | |     "get_degradation_transform",
+12 | |     "extract_frames_and_faces",
+13 | |     "split_videos_without_leakage",
+14 | |     "ImageForensicsDataset",
+15 | |     "create_dataloaders",
+16 | | ]
+   | |_^
+help: Apply an isort-style sorting to `__all__`
+   |
+6  | __all__ = [
+   -     "load_rgb_image",
+   -     "verify_dataset_balance",
+7  +     "ImageForensicsDataset",
+8  +     "create_dataloaders",
+9  +     "extract_frames_and_faces",
+10 +     "get_degradation_transform",
+11 |     "get_train_transforms",
+12 |     "get_val_transforms",
+   -     "get_degradation_transform",
+   -     "extract_frames_and_faces",
+13 +     "load_rgb_image",
+14 |     "split_videos_without_leakage",
+   -     "ImageForensicsDataset",
+   -     "create_dataloaders",
+15 +     "verify_dataset_balance",
+16 | ]
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> data\augmentation.py:1:1
+  |
+1 | / import albumentations as A
+2 | | from albumentations.pytorch import ToTensorV2
+  | |_____________________________________________^
+help: Organize imports
+  |
+3 |
+  -
+4 | IMAGENET_MEAN = (0.485, 0.456, 0.406)
+  |
+
+PYI041 [*] Use `float` instead of `int | float`
+  --> data\augmentation.py:36:15
+   |
+34 | def get_degradation_transform(
+35 |     degradation_type: str,
+36 |     severity: int | float,
+   |               ^^^^^^^^^^^
+37 |     image_size: int = 224,
+38 | ) -> A.Compose:
+   |
+help: Remove redundant type
+   |
+35 |     degradation_type: str,
+   -     severity: int | float,
+36 +     severity: float,
+37 |     image_size: int = 224,
+   |
+
+UP035 [*] Import from `collections.abc` instead: `Callable`
+ --> data\dataset_loader.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Callable, List, Optional, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import torch
+  |
+help: Import from `collections.abc`
+  |
+1 | from pathlib import Path
+  - from typing import Callable, List, Optional, Tuple
+2 + from typing import List, Optional, Tuple
+3 + from collections.abc import Callable
+4 |
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> data\dataset_loader.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Callable, List, Optional, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import torch
+  |
+
+UP035 `typing.Tuple` is deprecated, use `tuple` instead
+ --> data\dataset_loader.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Callable, List, Optional, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import torch
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\dataset_loader.py:15:18
+   |
+13 |     def __init__(
+14 |         self,
+15 |         samples: List[Tuple[str, int]],
+   |                  ^^^^
+16 |         transform: Optional[Callable] = None,
+17 |         image_size: int = 224,
+   |
+help: Replace with `list`
+   |
+14 |         self,
+   -         samples: List[Tuple[str, int]],
+15 +         samples: list[Tuple[str, int]],
+16 |         transform: Optional[Callable] = None,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:15:23
+   |
+13 |     def __init__(
+14 |         self,
+15 |         samples: List[Tuple[str, int]],
+   |                       ^^^^^
+16 |         transform: Optional[Callable] = None,
+17 |         image_size: int = 224,
+   |
+help: Replace with `tuple`
+   |
+14 |         self,
+   -         samples: List[Tuple[str, int]],
+15 +         samples: List[tuple[str, int]],
+16 |         transform: Optional[Callable] = None,
+   |
+
+UP045 [*] Use `X | None` for type annotations
+  --> data\dataset_loader.py:16:20
+   |
+14 |         self,
+15 |         samples: List[Tuple[str, int]],
+16 |         transform: Optional[Callable] = None,
+   |                    ^^^^^^^^^^^^^^^^^^
+17 |         image_size: int = 224,
+18 |     ) -> None:
+   |
+help: Convert to `X | None`
+   |
+15 |         samples: List[Tuple[str, int]],
+   -         transform: Optional[Callable] = None,
+16 +         transform: Callable | None = None,
+17 |         image_size: int = 224,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:26:40
+   |
+24 |         return len(self.samples)
+25 |
+26 |     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+   |                                        ^^^^^
+27 |         img_path, label = self.samples[idx]
+28 |         image = load_rgb_image(img_path, target_size=self.image_size)
+   |
+help: Replace with `tuple`
+   |
+25 |
+   -     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+26 +     def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
+27 |         img_path, label = self.samples[idx]
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\dataset_loader.py:36:101
+   |
+36 | def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> List[Tuple[str, int]]:
+   |                                                                                                     ^^^^
+37 |     """Scan a directory with real/ and fake/ subfolders into (path, label) tuples."""
+38 |     root = Path(root_dir)
+   |
+help: Replace with `list`
+   |
+35 |
+   - def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> List[Tuple[str, int]]:
+36 + def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> list[Tuple[str, int]]:
+37 |     """Scan a directory with real/ and fake/ subfolders into (path, label) tuples."""
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:36:106
+   |
+36 | def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> List[Tuple[str, int]]:
+   |                                                                                                          ^^^^^
+37 |     """Scan a directory with real/ and fake/ subfolders into (path, label) tuples."""
+38 |     root = Path(root_dir)
+   |
+help: Replace with `tuple`
+   |
+35 |
+   - def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> List[Tuple[str, int]]:
+36 + def collect_binary_folder_samples(root_dir: str, real_dir: str = "real", fake_dir: str = "fake") -> List[tuple[str, int]]:
+37 |     """Scan a directory with real/ and fake/ subfolders into (path, label) tuples."""
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\dataset_loader.py:40:14
+   |
+38 |     root = Path(root_dir)
+39 |     exts = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+40 |     samples: List[Tuple[str, int]] = []
+   |              ^^^^
+41 |
+42 |     for label, sub in [(0, real_dir), (1, fake_dir)]:
+   |
+help: Replace with `list`
+   |
+39 |     exts = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+   -     samples: List[Tuple[str, int]] = []
+40 +     samples: list[Tuple[str, int]] = []
+41 |
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:40:19
+   |
+38 |     root = Path(root_dir)
+39 |     exts = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+40 |     samples: List[Tuple[str, int]] = []
+   |                   ^^^^^
+41 |
+42 |     for label, sub in [(0, real_dir), (1, fake_dir)]:
+   |
+help: Replace with `tuple`
+   |
+39 |     exts = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
+   -     samples: List[Tuple[str, int]] = []
+40 +     samples: List[tuple[str, int]] = []
+41 |
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\dataset_loader.py:53:20
+   |
+52 | def create_dataloaders(
+53 |     train_samples: List[Tuple[str, int]],
+   |                    ^^^^
+54 |     val_samples: List[Tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+   |
+help: Replace with `list`
+   |
+52 | def create_dataloaders(
+   -     train_samples: List[Tuple[str, int]],
+53 +     train_samples: list[Tuple[str, int]],
+54 |     val_samples: List[Tuple[str, int]],
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:53:25
+   |
+52 | def create_dataloaders(
+53 |     train_samples: List[Tuple[str, int]],
+   |                         ^^^^^
+54 |     val_samples: List[Tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+   |
+help: Replace with `tuple`
+   |
+52 | def create_dataloaders(
+   -     train_samples: List[Tuple[str, int]],
+53 +     train_samples: List[tuple[str, int]],
+54 |     val_samples: List[Tuple[str, int]],
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\dataset_loader.py:54:18
+   |
+52 | def create_dataloaders(
+53 |     train_samples: List[Tuple[str, int]],
+54 |     val_samples: List[Tuple[str, int]],
+   |                  ^^^^
+55 |     train_transform: Optional[Callable] = None,
+56 |     val_transform: Optional[Callable] = None,
+   |
+help: Replace with `list`
+   |
+53 |     train_samples: List[Tuple[str, int]],
+   -     val_samples: List[Tuple[str, int]],
+54 +     val_samples: list[Tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:54:23
+   |
+52 | def create_dataloaders(
+53 |     train_samples: List[Tuple[str, int]],
+54 |     val_samples: List[Tuple[str, int]],
+   |                       ^^^^^
+55 |     train_transform: Optional[Callable] = None,
+56 |     val_transform: Optional[Callable] = None,
+   |
+help: Replace with `tuple`
+   |
+53 |     train_samples: List[Tuple[str, int]],
+   -     val_samples: List[Tuple[str, int]],
+54 +     val_samples: List[tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+   |
+
+UP045 [*] Use `X | None` for type annotations
+  --> data\dataset_loader.py:55:22
+   |
+53 |     train_samples: List[Tuple[str, int]],
+54 |     val_samples: List[Tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+   |                      ^^^^^^^^^^^^^^^^^^
+56 |     val_transform: Optional[Callable] = None,
+57 |     batch_size: int = 32,
+   |
+help: Convert to `X | None`
+   |
+54 |     val_samples: List[Tuple[str, int]],
+   -     train_transform: Optional[Callable] = None,
+55 +     train_transform: Callable | None = None,
+56 |     val_transform: Optional[Callable] = None,
+   |
+
+UP045 [*] Use `X | None` for type annotations
+  --> data\dataset_loader.py:56:20
+   |
+54 |     val_samples: List[Tuple[str, int]],
+55 |     train_transform: Optional[Callable] = None,
+56 |     val_transform: Optional[Callable] = None,
+   |                    ^^^^^^^^^^^^^^^^^^
+57 |     batch_size: int = 32,
+58 |     num_workers: int = 4,
+   |
+help: Convert to `X | None`
+   |
+55 |     train_transform: Optional[Callable] = None,
+   -     val_transform: Optional[Callable] = None,
+56 +     val_transform: Callable | None = None,
+57 |     batch_size: int = 32,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\dataset_loader.py:60:6
+   |
+58 |     num_workers: int = 4,
+59 |     image_size: int = 224,
+60 | ) -> Tuple[DataLoader, DataLoader]:
+   |      ^^^^^
+61 |     """Build train and validation DataLoaders."""
+62 |     train_ds = ImageForensicsDataset(train_samples, transform=train_transform, image_size=image_size)
+   |
+help: Replace with `tuple`
+   |
+59 |     image_size: int = 224,
+   - ) -> Tuple[DataLoader, DataLoader]:
+60 + ) -> tuple[DataLoader, DataLoader]:
+61 |     """Build train and validation DataLoaders."""
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> data\preprocessing.py:3:1
+  |
+1 | from collections import Counter
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> data\preprocessing.py:3:1
+  |
+1 | from collections import Counter
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP035 `typing.Tuple` is deprecated, use `tuple` instead
+ --> data\preprocessing.py:3:1
+  |
+1 | from collections import Counter
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\preprocessing.py:20:37
+   |
+20 | def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+   |                                     ^^^^
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+22 |     counts = Counter()
+   |
+help: Replace with `list`
+   |
+19 |
+   - def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+20 + def verify_dataset_balance(samples: list[Tuple[str, int]]) -> Dict[str, int]:
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\preprocessing.py:20:42
+   |
+20 | def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+   |                                          ^^^^^
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+22 |     counts = Counter()
+   |
+help: Replace with `tuple`
+   |
+19 |
+   - def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+20 + def verify_dataset_balance(samples: List[tuple[str, int]]) -> Dict[str, int]:
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> data\preprocessing.py:20:63
+   |
+20 | def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+   |                                                               ^^^^
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+22 |     counts = Counter()
+   |
+help: Replace with `dict`
+   |
+19 |
+   - def verify_dataset_balance(samples: List[Tuple[str, int]]) -> Dict[str, int]:
+20 + def verify_dataset_balance(samples: List[Tuple[str, int]]) -> dict[str, int]:
+21 |     """Verify file existence and return class counts (0=real, 1=fake)."""
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> data\video_processor.py:3:1
+  |
+1 | import random
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> data\video_processor.py:3:1
+  |
+1 | import random
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP035 `typing.Tuple` is deprecated, use `tuple` instead
+ --> data\video_processor.py:3:1
+  |
+1 | import random
+2 | from pathlib import Path
+3 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import cv2
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\video_processor.py:10:18
+   |
+ 9 | def split_videos_without_leakage(
+10 |     video_items: List[Tuple[str, int]],
+   |                  ^^^^
+11 |     train_ratio: float = 0.7,
+12 |     val_ratio: float = 0.15,
+   |
+help: Replace with `list`
+   |
+9  | def split_videos_without_leakage(
+   -     video_items: List[Tuple[str, int]],
+10 +     video_items: list[Tuple[str, int]],
+11 |     train_ratio: float = 0.7,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\video_processor.py:10:23
+   |
+ 9 | def split_videos_without_leakage(
+10 |     video_items: List[Tuple[str, int]],
+   |                       ^^^^^
+11 |     train_ratio: float = 0.7,
+12 |     val_ratio: float = 0.15,
+   |
+help: Replace with `tuple`
+   |
+9  | def split_videos_without_leakage(
+   -     video_items: List[Tuple[str, int]],
+10 +     video_items: List[tuple[str, int]],
+11 |     train_ratio: float = 0.7,
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> data\video_processor.py:14:6
+   |
+12 |     val_ratio: float = 0.15,
+13 |     seed: int = 42,
+14 | ) -> Dict[str, List[Tuple[str, int]]]:
+   |      ^^^^
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+16 |     rng = random.Random(seed)
+   |
+help: Replace with `dict`
+   |
+13 |     seed: int = 42,
+   - ) -> Dict[str, List[Tuple[str, int]]]:
+14 + ) -> dict[str, List[Tuple[str, int]]]:
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\video_processor.py:14:16
+   |
+12 |     val_ratio: float = 0.15,
+13 |     seed: int = 42,
+14 | ) -> Dict[str, List[Tuple[str, int]]]:
+   |                ^^^^
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+16 |     rng = random.Random(seed)
+   |
+help: Replace with `list`
+   |
+13 |     seed: int = 42,
+   - ) -> Dict[str, List[Tuple[str, int]]]:
+14 + ) -> Dict[str, list[Tuple[str, int]]]:
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> data\video_processor.py:14:21
+   |
+12 |     val_ratio: float = 0.15,
+13 |     seed: int = 42,
+14 | ) -> Dict[str, List[Tuple[str, int]]]:
+   |                     ^^^^^
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+16 |     rng = random.Random(seed)
+   |
+help: Replace with `tuple`
+   |
+13 |     seed: int = 42,
+   - ) -> Dict[str, List[Tuple[str, int]]]:
+14 + ) -> Dict[str, List[tuple[str, int]]]:
+15 |     """Split video-level items into train/val/test sets so frames never leak across splits."""
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\video_processor.py:37:6
+   |
+35 |     target_size: int = 224,
+36 |     margin: float = 0.25,
+37 | ) -> List[str]:
+   |      ^^^^
+38 |     """Extract uniformly sampled frames from a video and crop the largest detected face."""
+39 |     cap = cv2.VideoCapture(str(video_path))
+   |
+help: Replace with `list`
+   |
+36 |     margin: float = 0.25,
+   - ) -> List[str]:
+37 + ) -> list[str]:
+38 |     """Extract uniformly sampled frames from a video and crop the largest detected face."""
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> data\video_processor.py:55:18
+   |
+53 |     out_path = Path(output_dir)
+54 |     out_path.mkdir(parents=True, exist_ok=True)
+55 |     saved_paths: List[str] = []
+   |                  ^^^^
+56 |
+57 |     for idx in indices:
+   |
+help: Replace with `list`
+   |
+54 |     out_path.mkdir(parents=True, exist_ok=True)
+   -     saved_paths: List[str] = []
+55 +     saved_paths: list[str] = []
+56 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> evaluation\__init__.py:1:1
+  |
+1 | from .metrics import compute_all_metrics, count_parameters, measure_inference_time, aggregate_seed_metrics
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | __all__ = [
+  |
+help: Organize imports
+  |
+  - from .metrics import compute_all_metrics, count_parameters, measure_inference_time, aggregate_seed_metrics
+1 + from .metrics import (
+2 +     aggregate_seed_metrics,
+3 +     compute_all_metrics,
+4 +     count_parameters,
+5 +     measure_inference_time,
+6 + )
+7 |
+  |
+
+RUF022 [*] `__all__` is not sorted
+ --> evaluation\__init__.py:3:11
+  |
+1 |   from .metrics import compute_all_metrics, count_parameters, measure_inference_time, aggregate_seed_metrics
+2 |
+3 |   __all__ = [
+  |  ___________^
+4 | |     "compute_all_metrics",
+5 | |     "count_parameters",
+6 | |     "measure_inference_time",
+7 | |     "aggregate_seed_metrics",
+8 | | ]
+  | |_^
+help: Apply an isort-style sorting to `__all__`
+  |
+3 | __all__ = [
+4 +     "aggregate_seed_metrics",
+5 |     "compute_all_metrics",
+6 |     "count_parameters",
+7 |     "measure_inference_time",
+  -     "aggregate_seed_metrics",
+8 | ]
+  |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> evaluation\ablation.py:1:1
+  |
+1 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | import pandas as pd
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> evaluation\ablation.py:1:1
+  |
+1 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | import pandas as pd
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> evaluation\ablation.py:1:1
+  |
+1 | / from typing import Dict, List
+2 | |
+3 | | import pandas as pd
+4 | |
+5 | | from evaluation.metrics import count_parameters, measure_inference_time
+6 | | from models.ai_image_detector import AIImageDetector
+  | |____________________________________________________^
+help: Organize imports
+  |
+7 |
+  -
+8 | ABLATION_CONFIGS = [
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\ablation.py:24:11
+   |
+22 | def profile_ablation_models() -> pd.DataFrame:
+23 |     """Profile parameter count and inference latency for all ablation configurations."""
+24 |     rows: List[Dict[str, object]] = []
+   |           ^^^^
+25 |     for cfg in ABLATION_CONFIGS:
+26 |         model = AIImageDetector(streams=cfg["streams"], fusion_type=cfg["fusion"])
+   |
+help: Replace with `list`
+   |
+23 |     """Profile parameter count and inference latency for all ablation configurations."""
+   -     rows: List[Dict[str, object]] = []
+24 +     rows: list[Dict[str, object]] = []
+25 |     for cfg in ABLATION_CONFIGS:
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\ablation.py:24:16
+   |
+22 | def profile_ablation_models() -> pd.DataFrame:
+23 |     """Profile parameter count and inference latency for all ablation configurations."""
+24 |     rows: List[Dict[str, object]] = []
+   |                ^^^^
+25 |     for cfg in ABLATION_CONFIGS:
+26 |         model = AIImageDetector(streams=cfg["streams"], fusion_type=cfg["fusion"])
+   |
+help: Replace with `dict`
+   |
+23 |     """Profile parameter count and inference latency for all ablation configurations."""
+   -     rows: List[Dict[str, object]] = []
+24 +     rows: List[dict[str, object]] = []
+25 |     for cfg in ABLATION_CONFIGS:
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> evaluation\cross_generator.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import pandas as pd
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> evaluation\cross_generator.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import pandas as pd
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\cross_generator.py:17:17
+   |
+15 |     model: torch.nn.Module,
+16 |     genimage_root: str,
+17 |     generators: List[str],
+   |                 ^^^^
+18 |     batch_size: int = 32,
+19 |     image_size: int = 224,
+   |
+help: Replace with `list`
+   |
+16 |     genimage_root: str,
+   -     generators: List[str],
+17 +     generators: list[str],
+18 |     batch_size: int = 32,
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\cross_generator.py:25:11
+   |
+23 |     device = next(model.parameters()).device
+24 |     model.eval()
+25 |     rows: List[Dict[str, object]] = []
+   |           ^^^^
+26 |
+27 |     for gen in generators:
+   |
+help: Replace with `list`
+   |
+24 |     model.eval()
+   -     rows: List[Dict[str, object]] = []
+25 +     rows: list[Dict[str, object]] = []
+26 |
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\cross_generator.py:25:16
+   |
+23 |     device = next(model.parameters()).device
+24 |     model.eval()
+25 |     rows: List[Dict[str, object]] = []
+   |                ^^^^
+26 |
+27 |     for gen in generators:
+   |
+help: Replace with `dict`
+   |
+24 |     model.eval()
+   -     rows: List[Dict[str, object]] = []
+25 +     rows: List[dict[str, object]] = []
+26 |
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> evaluation\evaluate.py:11:1
+   |
+ 9 |   sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+10 |
+11 | / from data.augmentation import get_val_transforms
+12 | | from data.dataset_loader import ImageForensicsDataset, collect_binary_folder_samples
+13 | | from evaluation.metrics import compute_all_metrics, count_parameters, measure_inference_time
+14 | | from models.ai_image_detector import AIImageDetector
+15 | | from models.deepfake_detector import DeepfakeDetector
+   | |_____________________________________________________^
+help: Organize imports
+   |
+12 | from data.dataset_loader import ImageForensicsDataset, collect_binary_folder_samples
+   - from evaluation.metrics import compute_all_metrics, count_parameters, measure_inference_time
+13 + from evaluation.metrics import (
+14 +     compute_all_metrics,
+15 +     count_parameters,
+16 +     measure_inference_time,
+17 + )
+18 | from models.ai_image_detector import AIImageDetector
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> evaluation\metrics.py:2:1
+  |
+1 | import time
+2 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import numpy as np
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> evaluation\metrics.py:2:1
+  |
+1 | import time
+2 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import numpy as np
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\metrics.py:47:26
+   |
+46 | def compute_all_metrics(
+47 |     y_true: np.ndarray | List[int],
+   |                          ^^^^
+48 |     y_prob: np.ndarray | List[float],
+49 |     threshold: float = 0.5,
+   |
+help: Replace with `list`
+   |
+46 | def compute_all_metrics(
+   -     y_true: np.ndarray | List[int],
+47 +     y_true: np.ndarray | list[int],
+48 |     y_prob: np.ndarray | List[float],
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\metrics.py:48:26
+   |
+46 | def compute_all_metrics(
+47 |     y_true: np.ndarray | List[int],
+48 |     y_prob: np.ndarray | List[float],
+   |                          ^^^^
+49 |     threshold: float = 0.5,
+50 | ) -> Dict[str, object]:
+   |
+help: Replace with `list`
+   |
+47 |     y_true: np.ndarray | List[int],
+   -     y_prob: np.ndarray | List[float],
+48 +     y_prob: np.ndarray | list[float],
+49 |     threshold: float = 0.5,
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:50:6
+   |
+48 |     y_prob: np.ndarray | List[float],
+49 |     threshold: float = 0.5,
+50 | ) -> Dict[str, object]:
+   |      ^^^^
+51 |     """Compute classification metrics at a fixed threshold (default 0.5)."""
+52 |     y_true = np.asarray(y_true).astype(int)
+   |
+help: Replace with `dict`
+   |
+49 |     threshold: float = 0.5,
+   - ) -> Dict[str, object]:
+50 + ) -> dict[str, object]:
+51 |     """Compute classification metrics at a fixed threshold (default 0.5)."""
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\metrics.py:78:37
+   |
+78 | def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+   |                                     ^^^^
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   |
+help: Replace with `list`
+   |
+77 |
+   - def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+78 + def aggregate_seed_metrics(results: list[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:78:42
+   |
+78 | def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+   |                                          ^^^^
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   |
+help: Replace with `dict`
+   |
+77 |
+   - def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+78 + def aggregate_seed_metrics(results: List[dict[str, float]]) -> Dict[str, Dict[str, float]]:
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:78:64
+   |
+78 | def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+   |                                                                ^^^^
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   |
+help: Replace with `dict`
+   |
+77 |
+   - def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+78 + def aggregate_seed_metrics(results: List[Dict[str, float]]) -> dict[str, Dict[str, float]]:
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:78:74
+   |
+78 | def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+   |                                                                          ^^^^
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   |
+help: Replace with `dict`
+   |
+77 |
+   - def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+78 + def aggregate_seed_metrics(results: List[Dict[str, float]]) -> Dict[str, dict[str, float]]:
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:81:14
+   |
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+81 |     summary: Dict[str, Dict[str, float]] = {}
+   |              ^^^^
+82 |     for k in keys:
+83 |         vals = np.array([r[k] for r in results], dtype=float)
+   |
+help: Replace with `dict`
+   |
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   -     summary: Dict[str, Dict[str, float]] = {}
+81 +     summary: dict[str, Dict[str, float]] = {}
+82 |     for k in keys:
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\metrics.py:81:24
+   |
+79 |     """Aggregate scalar metrics across multiple random seeds as mean and std."""
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+81 |     summary: Dict[str, Dict[str, float]] = {}
+   |                        ^^^^
+82 |     for k in keys:
+83 |         vals = np.array([r[k] for r in results], dtype=float)
+   |
+help: Replace with `dict`
+   |
+80 |     keys = [k for k, v in results[0].items() if isinstance(v, (int, float))]
+   -     summary: Dict[str, Dict[str, float]] = {}
+81 +     summary: Dict[str, dict[str, float]] = {}
+82 |     for k in keys:
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+  --> evaluation\robustness.py:1:1
+   |
+ 1 | / from pathlib import Path
+ 2 | | from typing import Dict, List, Tuple
+ 3 | |
+ 4 | | import pandas as pd
+ 5 | | import torch
+ 6 | | from torch.utils.data import DataLoader
+ 7 | |
+ 8 | | from data.augmentation import get_degradation_transform
+ 9 | | from data.dataset_loader import ImageForensicsDataset
+10 | | from evaluation.metrics import compute_all_metrics
+   | |__________________________________________________^
+help: Organize imports
+   |
+11 |
+   -
+12 | DEFAULT_DEGRADATIONS = [
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> evaluation\robustness.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import pandas as pd
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> evaluation\robustness.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import pandas as pd
+  |
+
+UP035 `typing.Tuple` is deprecated, use `tuple` instead
+ --> evaluation\robustness.py:2:1
+  |
+1 | from pathlib import Path
+2 | from typing import Dict, List, Tuple
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | import pandas as pd
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\robustness.py:29:14
+   |
+27 | def evaluate_robustness(
+28 |     model: torch.nn.Module,
+29 |     samples: List[Tuple[str, int]],
+   |              ^^^^
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+31 |     batch_size: int = 32,
+   |
+help: Replace with `list`
+   |
+28 |     model: torch.nn.Module,
+   -     samples: List[Tuple[str, int]],
+29 +     samples: list[Tuple[str, int]],
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> evaluation\robustness.py:29:19
+   |
+27 | def evaluate_robustness(
+28 |     model: torch.nn.Module,
+29 |     samples: List[Tuple[str, int]],
+   |                   ^^^^^
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+31 |     batch_size: int = 32,
+   |
+help: Replace with `tuple`
+   |
+28 |     model: torch.nn.Module,
+   -     samples: List[Tuple[str, int]],
+29 +     samples: List[tuple[str, int]],
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\robustness.py:30:19
+   |
+28 |     model: torch.nn.Module,
+29 |     samples: List[Tuple[str, int]],
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+   |                   ^^^^
+31 |     batch_size: int = 32,
+32 |     image_size: int = 224,
+   |
+help: Replace with `list`
+   |
+29 |     samples: List[Tuple[str, int]],
+   -     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+30 +     degradations: list[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+31 |     batch_size: int = 32,
+   |
+
+UP006 [*] Use `tuple` instead of `Tuple` for type annotation
+  --> evaluation\robustness.py:30:24
+   |
+28 |     model: torch.nn.Module,
+29 |     samples: List[Tuple[str, int]],
+30 |     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+   |                        ^^^^^
+31 |     batch_size: int = 32,
+32 |     image_size: int = 224,
+   |
+help: Replace with `tuple`
+   |
+29 |     samples: List[Tuple[str, int]],
+   -     degradations: List[Tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+30 +     degradations: List[tuple[str, int | float]] = DEFAULT_DEGRADATIONS,
+31 |     batch_size: int = 32,
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> evaluation\robustness.py:38:11
+   |
+36 |     device = next(model.parameters()).device
+37 |     model.eval()
+38 |     rows: List[Dict[str, object]] = []
+   |           ^^^^
+39 |
+40 |     for deg_type, severity in degradations:
+   |
+help: Replace with `list`
+   |
+37 |     model.eval()
+   -     rows: List[Dict[str, object]] = []
+38 +     rows: list[Dict[str, object]] = []
+39 |
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> evaluation\robustness.py:38:16
+   |
+36 |     device = next(model.parameters()).device
+37 |     model.eval()
+38 |     rows: List[Dict[str, object]] = []
+   |                ^^^^
+39 |
+40 |     for deg_type, severity in degradations:
+   |
+help: Replace with `dict`
+   |
+37 |     model.eval()
+   -     rows: List[Dict[str, object]] = []
+38 +     rows: List[dict[str, object]] = []
+39 |
+   |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> explainability\gradcam.py:1:1
+  |
+1 | from typing import Dict
+  | ^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | import cv2
+  |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> explainability\gradcam.py:22:27
+   |
+20 |     def __init__(self, model: torch.nn.Module) -> None:
+21 |         self.model = model
+22 |         self.activations: Dict[str, torch.Tensor] = {}
+   |                           ^^^^
+23 |         self.gradients: Dict[str, torch.Tensor] = {}
+24 |         self._handles = []
+   |
+help: Replace with `dict`
+   |
+21 |         self.model = model
+   -         self.activations: Dict[str, torch.Tensor] = {}
+22 +         self.activations: dict[str, torch.Tensor] = {}
+23 |         self.gradients: Dict[str, torch.Tensor] = {}
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> explainability\gradcam.py:23:25
+   |
+21 |         self.model = model
+22 |         self.activations: Dict[str, torch.Tensor] = {}
+23 |         self.gradients: Dict[str, torch.Tensor] = {}
+   |                         ^^^^
+24 |         self._handles = []
+   |
+help: Replace with `dict`
+   |
+22 |         self.activations: Dict[str, torch.Tensor] = {}
+   -         self.gradients: Dict[str, torch.Tensor] = {}
+23 +         self.gradients: dict[str, torch.Tensor] = {}
+24 |         self._handles = []
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> explainability\gradcam.py:42:44
+   |
+40 |         return hook
+41 |
+42 |     def generate(self, x: torch.Tensor) -> Dict[str, object]:
+   |                                            ^^^^
+43 |         self.model.eval()
+44 |         self.model.zero_grad(set_to_none=True)
+   |
+help: Replace with `dict`
+   |
+41 |
+   -     def generate(self, x: torch.Tensor) -> Dict[str, object]:
+42 +     def generate(self, x: torch.Tensor) -> dict[str, object]:
+43 |         self.model.eval()
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> explainability\gradcam.py:50:15
+   |
+49 |         h, w = x.shape[-2:]
+50 |         cams: Dict[str, np.ndarray] = {}
+   |               ^^^^
+51 |         for name in self.model.stream_modules:
+52 |             act = self.activations[name][0]  # [C, H', W']
+   |
+help: Replace with `dict`
+   |
+49 |         h, w = x.shape[-2:]
+   -         cams: Dict[str, np.ndarray] = {}
+50 +         cams: dict[str, np.ndarray] = {}
+51 |         for name in self.model.stream_modules:
+   |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> models\__init__.py:1:1
+  |
+1 | / from .residual_stream import ResidualStream, SRMConv2d
+2 | | from .frequency_stream import FrequencyStream
+3 | | from .content_stream import ContentStream, BayarConv2d, SobelEdgeExtractor
+  | |__________________________________________________________________________^
+4 |
+5 |   __all__ = [
+  |
+help: Organize imports
+  |
+1 + from .content_stream import BayarConv2d, ContentStream, SobelEdgeExtractor
+2 + from .frequency_stream import FrequencyStream
+3 | from .residual_stream import ResidualStream, SRMConv2d
+  - from .frequency_stream import FrequencyStream
+  - from .content_stream import ContentStream, BayarConv2d, SobelEdgeExtractor
+4 |
+  |
+
+RUF022 [*] `__all__` is not sorted
+  --> models\__init__.py:5:11
+   |
+ 3 |   from .content_stream import ContentStream, BayarConv2d, SobelEdgeExtractor
+ 4 |
+ 5 |   __all__ = [
+   |  ___________^
+ 6 | |     "ResidualStream",
+ 7 | |     "SRMConv2d",
+ 8 | |     "FrequencyStream",
+ 9 | |     "ContentStream",
+10 | |     "BayarConv2d",
+11 | |     "SobelEdgeExtractor",
+12 | | ]
+   | |_^
+help: Apply an isort-style sorting to `__all__`
+   |
+5  | __all__ = [
+6  +     "BayarConv2d",
+7  +     "ContentStream",
+8  +     "FrequencyStream",
+9  |     "ResidualStream",
+10 |     "SRMConv2d",
+   -     "FrequencyStream",
+   -     "ContentStream",
+   -     "BayarConv2d",
+11 |     "SobelEdgeExtractor",
+   |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> models\content_stream.py:2:8
+  |
+1 | import torch
+2 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+3 | import torch.nn.functional as F
+  |
+help: Replace with `from torch import nn`
+  |
+1 | import torch
+  - import torch.nn as nn
+2 + from torch import nn
+3 | import torch.nn.functional as F
+  |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> models\cross_attention.py:2:8
+  |
+1 | import torch
+2 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+help: Replace with `from torch import nn`
+  |
+1 | import torch
+  - import torch.nn as nn
+2 + from torch import nn
+3 |
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> models\frequency_stream.py:1:1
+  |
+1 | / import math
+2 | | import torch
+3 | | import torch.nn as nn
+  | |_____________________^
+help: Organize imports
+  |
+1 | import math
+2 +
+3 | import torch
+  |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> models\frequency_stream.py:3:8
+  |
+1 | import math
+2 | import torch
+3 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+help: Replace with `from torch import nn`
+  |
+2 | import torch
+  - import torch.nn as nn
+3 + from torch import nn
+4 |
+  |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> models\fusion_model.py:1:1
+  |
+1 | from typing import Dict, List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | import torch
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> models\fusion_model.py:1:1
+  |
+1 | from typing import Dict, List, Optional
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 |
+3 | import torch
+  |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> models\fusion_model.py:4:8
+  |
+3 | import torch
+4 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+5 | import torch.nn.functional as F
+  |
+help: Replace with `from torch import nn`
+  |
+3 | import torch
+  - import torch.nn as nn
+4 + from torch import nn
+5 | import torch.nn.functional as F
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> models\fusion_model.py:36:37
+   |
+34 |         )
+35 |
+36 |     def forward(self, feature_maps: List[torch.Tensor]) -> torch.Tensor:
+   |                                     ^^^^
+37 |         x = torch.cat(feature_maps, dim=1)
+38 |         x = x * self.channel_att(x)
+   |
+help: Replace with `list`
+   |
+35 |
+   -     def forward(self, feature_maps: List[torch.Tensor]) -> torch.Tensor:
+36 +     def forward(self, feature_maps: list[torch.Tensor]) -> torch.Tensor:
+37 |         x = torch.cat(feature_maps, dim=1)
+   |
+
+UP045 [*] Use `X | None` for type annotations
+  --> models\fusion_model.py:50:18
+   |
+48 |     def __init__(
+49 |         self,
+50 |         streams: Optional[List[str]] = None,
+   |                  ^^^^^^^^^^^^^^^^^^^
+51 |         fusion_type: str = "cross_attention",
+52 |         feature_dim: int = 256,
+   |
+help: Convert to `X | None`
+   |
+49 |         self,
+   -         streams: Optional[List[str]] = None,
+50 +         streams: List[str] | None = None,
+51 |         fusion_type: str = "cross_attention",
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> models\fusion_model.py:50:27
+   |
+48 |     def __init__(
+49 |         self,
+50 |         streams: Optional[List[str]] = None,
+   |                           ^^^^
+51 |         fusion_type: str = "cross_attention",
+52 |         feature_dim: int = 256,
+   |
+help: Replace with `list`
+   |
+49 |         self,
+   -         streams: Optional[List[str]] = None,
+50 +         streams: Optional[list[str]] = None,
+51 |         fusion_type: str = "cross_attention",
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> models\fusion_model.py:97:75
+   |
+95 |         self.embed_proj = nn.Linear(fused_dim, 128)
+96 |
+97 |     def forward(self, x: torch.Tensor, return_embedding: bool = False) -> Dict[str, torch.Tensor]:
+   |                                                                           ^^^^
+98 |         fmaps, fvecs = [], []
+99 |         for name in self.streams_names:
+   |
+help: Replace with `dict`
+   |
+96 |
+   -     def forward(self, x: torch.Tensor, return_embedding: bool = False) -> Dict[str, torch.Tensor]:
+97 +     def forward(self, x: torch.Tensor, return_embedding: bool = False) -> dict[str, torch.Tensor]:
+98 |         fmaps, fvecs = [], []
+   |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> models\residual_stream.py:3:8
+  |
+1 | import numpy as np
+2 | import torch
+3 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+4 | import torch.nn.functional as F
+  |
+help: Replace with `from torch import nn`
+  |
+2 | import torch
+  - import torch.nn as nn
+3 + from torch import nn
+4 | import torch.nn.functional as F
+  |
+
+I001 [*] Import block is un-sorted or un-formatted
+ --> training\__init__.py:1:1
+  |
+1 | / from .losses import SupervisedContrastiveLoss, CombinedForensicLoss
+2 | | from .trainer import Trainer
+  | |____________________________^
+3 |
+4 |   __all__ = ["SupervisedContrastiveLoss", "CombinedForensicLoss", "Trainer"]
+  |
+help: Organize imports
+  |
+  - from .losses import SupervisedContrastiveLoss, CombinedForensicLoss
+1 + from .losses import CombinedForensicLoss, SupervisedContrastiveLoss
+2 | from .trainer import Trainer
+  |
+
+RUF022 [*] `__all__` is not sorted
+ --> training\__init__.py:4:11
+  |
+2 | from .trainer import Trainer
+3 |
+4 | __all__ = ["SupervisedContrastiveLoss", "CombinedForensicLoss", "Trainer"]
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: Apply an isort-style sorting to `__all__`
+  |
+3 |
+  - __all__ = ["SupervisedContrastiveLoss", "CombinedForensicLoss", "Trainer"]
+4 + __all__ = ["CombinedForensicLoss", "SupervisedContrastiveLoss", "Trainer"]
+  |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> training\losses.py:2:8
+  |
+1 | import torch
+2 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+3 | import torch.nn.functional as F
+  |
+help: Replace with `from torch import nn`
+  |
+1 | import torch
+  - import torch.nn as nn
+2 + from torch import nn
+3 | import torch.nn.functional as F
+  |
+
+F401 [*] `torch.nn.functional` imported but unused
+ --> training\losses.py:3:31
+  |
+1 | import torch
+2 | import torch.nn as nn
+3 | import torch.nn.functional as F
+  |                               ^
+help: Remove unused import: `torch.nn.functional`
+  |
+2 | import torch.nn as nn
+  - import torch.nn.functional as F
+3 |
+  |
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+ --> training\trainer.py:3:1
+  |
+1 | import json
+2 | from pathlib import Path
+3 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import torch
+  |
+
+UP035 `typing.List` is deprecated, use `list` instead
+ --> training\trainer.py:3:1
+  |
+1 | import json
+2 | from pathlib import Path
+3 | from typing import Dict, List
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 |
+5 | import torch
+  |
+
+PLR0402 [*] Use `from torch import nn` in lieu of alias
+ --> training\trainer.py:6:8
+  |
+5 | import torch
+6 | import torch.nn as nn
+  |        ^^^^^^^^^^^^^^
+7 | from torch.utils.data import DataLoader
+8 | from tqdm import tqdm
+  |
+help: Replace with `from torch import nn`
+  |
+5 | import torch
+  - import torch.nn as nn
+6 + from torch import nn
+7 | from torch.utils.data import DataLoader
+  |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> training\trainer.py:35:23
+   |
+33 |         self.scaler = torch.amp.GradScaler("cuda", enabled=self.use_amp)
+34 |         self.best_val_loss = float("inf")
+35 |         self.history: List[Dict[str, float]] = []
+   |                       ^^^^
+36 |
+37 |     def _run_epoch(self, loader: DataLoader, train: bool) -> Dict[str, float]:
+   |
+help: Replace with `list`
+   |
+34 |         self.best_val_loss = float("inf")
+   -         self.history: List[Dict[str, float]] = []
+35 +         self.history: list[Dict[str, float]] = []
+36 |
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> training\trainer.py:35:28
+   |
+33 |         self.scaler = torch.amp.GradScaler("cuda", enabled=self.use_amp)
+34 |         self.best_val_loss = float("inf")
+35 |         self.history: List[Dict[str, float]] = []
+   |                            ^^^^
+36 |
+37 |     def _run_epoch(self, loader: DataLoader, train: bool) -> Dict[str, float]:
+   |
+help: Replace with `dict`
+   |
+34 |         self.best_val_loss = float("inf")
+   -         self.history: List[Dict[str, float]] = []
+35 +         self.history: List[dict[str, float]] = []
+36 |
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> training\trainer.py:37:62
+   |
+35 |         self.history: List[Dict[str, float]] = []
+36 |
+37 |     def _run_epoch(self, loader: DataLoader, train: bool) -> Dict[str, float]:
+   |                                                              ^^^^
+38 |         self.model.train(train)
+39 |         total_loss = 0.0
+   |
+help: Replace with `dict`
+   |
+36 |
+   -     def _run_epoch(self, loader: DataLoader, train: bool) -> Dict[str, float]:
+37 +     def _run_epoch(self, loader: DataLoader, train: bool) -> dict[str, float]:
+38 |         self.model.train(train)
+   |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+  --> training\trainer.py:95:107
+   |
+93 |         return int(ckpt["epoch"]) + 1
+94 |
+95 |     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[Dict[str, float]]:
+   |                                                                                                           ^^^^
+96 |         for epoch in range(start_epoch, epochs + 1):
+97 |             train_metrics = self._run_epoch(train_loader, train=True)
+   |
+help: Replace with `list`
+   |
+94 |
+   -     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[Dict[str, float]]:
+95 +     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> list[Dict[str, float]]:
+96 |         for epoch in range(start_epoch, epochs + 1):
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> training\trainer.py:95:112
+   |
+93 |         return int(ckpt["epoch"]) + 1
+94 |
+95 |     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[Dict[str, float]]:
+   |                                                                                                                ^^^^
+96 |         for epoch in range(start_epoch, epochs + 1):
+97 |             train_metrics = self._run_epoch(train_loader, train=True)
+   |
+help: Replace with `dict`
+   |
+94 |
+   -     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[Dict[str, float]]:
+95 +     def fit(self, train_loader: DataLoader, val_loader: DataLoader, epochs: int, start_epoch: int = 1) -> List[dict[str, float]]:
+96 |         for epoch in range(start_epoch, epochs + 1):
+   |
+
+Found 104 errors.
+[*] 82 fixable with `--fix`.
